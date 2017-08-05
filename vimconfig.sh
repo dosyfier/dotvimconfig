@@ -23,9 +23,14 @@ function init() {
 function add() {
   url_parts=(`echo $1 | grep -Po '[^\/]+'`)
   plugin_name=${url_parts[-1]}
-  git submodule add $1 bundle/$plugin_name
-  git add .
-  git commit -m "Install $plugin_name bundle as a submodule."
+  if [[ -d bundle/$plugin_name ]]; then
+    echo "The $plugin_name plugin already exists under bundle/. Doing nothing..."
+    exit 2
+  else
+    git submodule add $1 bundle/$plugin_name
+    git add .
+    git commit -m "Install $plugin_name bundle as a submodule."
+  fi
 }
 
 function update() {
