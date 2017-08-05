@@ -28,7 +28,7 @@ function add() {
     exit 2
   else
     git submodule add $1 bundle/$plugin_name
-    git add .
+    git add bundle/$plugin_name
     git commit -m "Install $plugin_name bundle as a submodule."
   fi
 }
