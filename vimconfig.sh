@@ -1,7 +1,15 @@
 #!/bin/bash
 
 function usage() {
-  echo "Usage: vimconfig <init|add|update>"
+  echo ""
+  echo "Usage: vimconfig <init|add|update> [plugin-url]"
+  echo ""
+  echo "Detailed commands:"
+  echo "******************"
+  echo "vim init             -> Initializes Vim configuration"
+  echo "vim add [plugin-url] -> Register a new Vim plugin into your configuration"
+  echo "vim update           -> Update all registered Vim plugins at once"
+  echo ""
 }
 
 function init() {
@@ -13,7 +21,8 @@ function init() {
 }
 
 function add() {
-  plugin_name=${1/*\//}
+  url_parts=(`echo $1 | grep -Po '[^\/]+'`)
+  plugin_name=${url_parts[-1]}
   git submodule add $1 bundle/$plugin_name
   git add .
   git commit -m "Install $plugin_name bundle as a submodule."
