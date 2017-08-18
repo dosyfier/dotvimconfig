@@ -162,3 +162,6 @@ nnoremap <C-L> :nohl<CR><C-L>
 " Activate Pathogen
 execute pathogen#infect()
 
+" Press F4 to toggle highlighting on/off, and show current value.
+:noremap <F4> :set hlsearch! hlsearch?<CR>
+
