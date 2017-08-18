@@ -28,7 +28,7 @@ function init() {
 
 function add() {
   url_parts=(`echo $1 | grep -Po '[^\/]+'`)
-  plugin_name=${url_parts[-1]}
+  plugin_name=${url_parts[-1]/%.git/}
   if [[ -d bundle/$plugin_name ]]; then
     echo "The $plugin_name plugin already exists under bundle/. Doing nothing..."
     exit 2
