@@ -22,3 +22,6 @@
 [submodule "bundle/typescript-vim"]
 	path = bundle/typescript-vim
 	url = https://github.com/leafgarland/typescript-vim.git
+[submodule "bundle/logstash.vim"]
+	path = bundle/logstash.vim
+	url = https://github.com/robbles/logstash.vim
