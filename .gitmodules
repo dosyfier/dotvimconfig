@@ -25,3 +25,6 @@
 [submodule "bundle/logstash.vim"]
 	path = bundle/logstash.vim
 	url = https://github.com/robbles/logstash.vim
+[submodule "bundle/vim-repeat"]
+	path = bundle/vim-repeat
+	url = https://github.com/tpope/vim-repeat
