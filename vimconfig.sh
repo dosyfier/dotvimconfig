@@ -1,21 +1,23 @@
 #!/bin/bash
 
 function usage() {
-  echo ""
-  echo "Usage: vimconfig <init|add|update> [plugin-url]"
-  echo ""
-  echo "Detailed commands:"
-  echo "******************"
-  echo "vimconfig init                 -> Initializes Vim configuration"
-  echo "vimconfig add [plugin-url]     -> Register a new Vim plugin into your configuration"
-  echo "vimconfig remove [plugin-name] -> Delete some Vim plugin from your configuration"
-  echo "vimconfig update               -> Update all registered Vim plugins at once"
-  echo ""
-  echo "Examples:"
-  echo "*********"
-  echo "vimconfig add https://github.com/tpope/vim-surround"
-  echo "vimconfig remove vim-surround"
-  echo ""
+  cat <<EOF
+
+Usage: vimconfig <init|add|update> [plugin-url]
+
+Detailed commands:
+******************
+vimconfig init                 -> Initializes Vim configuration
+vimconfig add [plugin-url]     -> Register a new Vim plugin into your configuration
+vimconfig remove [plugin-name] -> Delete some Vim plugin from your configuration
+vimconfig update               -> Update all registered Vim plugins at once
+
+Examples:
+*********
+vimconfig add https://github.com/tpope/vim-surround
+vimconfig remove vim-surround
+
+EOF
 }
 
 function init() {
