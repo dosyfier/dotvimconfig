@@ -165,3 +165,10 @@ execute pathogen#infect()
 " Press F4 to toggle highlighting on/off, and show current value.
 :noremap <F4> :set hlsearch! hlsearch?<CR>
 
+" Thanks @alan-thompson
+" Fix the difficult-to-read default setting for diff text highlighting. The
+" bang (!) is required since we are overwriting the DiffText setting. The
+" highlighting for "Todo" also looks nice (yellow) if you don't like the 
+" "MatchParen" colors.
+highlight! link DiffText Todo
+
