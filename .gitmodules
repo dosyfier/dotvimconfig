@@ -31,3 +31,6 @@
 [submodule "bundle/vim-freemarker"]
 	path = bundle/vim-freemarker
 	url = https://github.com/andreshazard/vim-freemarker
+[submodule "bundle/Jenkinsfile-vim-syntax"]
+	path = bundle/Jenkinsfile-vim-syntax
+	url = https://github.com/martinda/Jenkinsfile-vim-syntax
