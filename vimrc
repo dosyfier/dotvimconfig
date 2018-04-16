@@ -165,6 +165,10 @@ execute pathogen#infect()
 " Press F4 to toggle highlighting on/off, and show current value.
 :noremap <F4> :set hlsearch! hlsearch?<CR>
 
+" Press Ctrl-r after selecting some text in visual mode to template a
+" '%s' Vim command to substitute it.
+vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
+
 " Thanks @alan-thompson
 " Fix the difficult-to-read default setting for diff text highlighting. The
 " bang (!) is required since we are overwriting the DiffText setting. The
