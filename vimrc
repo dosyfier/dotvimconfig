@@ -132,8 +132,6 @@ set pastetoggle=<F11>
 " Indentation settings according to personal preference.
 
 " Indentation settings for using 4 spaces instead of tabs.
-" Do not change 'tabstop' from its default value of 8 with this setup.
-set shiftwidth=2
 set softtabstop=2
 set expandtab
 
@@ -162,9 +160,6 @@ nnoremap <C-L> :nohl<CR><C-L>
 " Activate Pathogen
 execute pathogen#infect()
 
-" Press F4 to toggle highlighting on/off, and show current value.
-:noremap <F4> :set hlsearch! hlsearch?<CR>
-
 " Press Ctrl-r after selecting some text in visual mode to template a
 " '%s' Vim command to substitute it.
 vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
@@ -176,3 +171,5 @@ vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 " "MatchParen" colors.
 highlight! link DiffText Todo
 
+" My favorite color scheme
+colorscheme bubblegum-256-dark
