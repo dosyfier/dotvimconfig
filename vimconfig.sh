@@ -84,6 +84,7 @@ remove() {
 
 # Update all registered Vim plugins at once
 update() {
+  git submodule update
   git submodule foreach git pull origin master
 }
 
