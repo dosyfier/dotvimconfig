@@ -34,3 +34,6 @@
 [submodule "bundle/Jenkinsfile-vim-syntax"]
 	path = bundle/Jenkinsfile-vim-syntax
 	url = https://github.com/martinda/Jenkinsfile-vim-syntax
+[submodule "bundle/setcolors.vim"]
+	path = bundle/setcolors.vim
+	url = https://github.com/felixhummel/setcolors.vim
