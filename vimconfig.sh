@@ -44,11 +44,13 @@ init() {
   # ~/.vim from the actual dotvimconfig project directory
   if ! [ "$real_dirname" = "$HOME/.vim" ] ; then
     rm -rf "$HOME/.vim"
-    rm -f ~/.vimrc
     ln -s "$real_dirname" "$HOME/.vim"
-    ln -s ~/.vim/vimrc ~/.vimrc
   fi
  
+  # Erase existing, and (TODO) warn the user about it
+  rm -f ~/.vimrc
+  ln -s ~/.vim/vimrc ~/.vimrc
+
   git submodule init
   git submodule update
 }
