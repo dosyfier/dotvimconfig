@@ -26,31 +26,54 @@ EOF
 
 # Run the provided command & arguments into dotvimconfig project's directory
 run_in_project() {
+  set -e
   pushd "$(dirname $0)" > /dev/null
+  trap "popd > /dev/null" EXIT
   $@
-  return_code=$?
-  popd > /dev/null
-  return $?
+}
+
+# Ask the user for the deletion of the file or directory provided as argument:
+# - If accepted, remove it and go on,
+# - Otherwise, exit in error.
+remove_or_abort() {
+  if [ -e "$1" ]; then
+    echo "Existing $1 detected..."
+    while ! [[ $REPLY =~ ^[yn]$ ]]; do
+      read -p "Override? [y/n] " -r
+    done
+    if [ $REPLY = y ]; then
+      rm -rf "$1"
+    else
+      return 2
+    fi
+  fi
 }
 
 # Initializes Vim configuration
 init() {
   # Build this script's effective parent directory
-  # by resolving links and/or trailing ~
-  real_dirname="`readlink -f $(dirname $0)`"
-  real_dirname="${real_dirname/#\~/$HOME}"
+  # (using pwd since we are necessarily in dotvimconfig dir,
+  # and because, due to run_in_project, '$(dirname $0)' would be wrong)
+  real_dirname="`pwd`"
 
   # If this script isn't launched from ~/.vim dir, then force rebuilding 
   # ~/.vim from the actual dotvimconfig project directory
+  echo "Init $HOME/.vim..."
   if ! [ "$real_dirname" = "$HOME/.vim" ] ; then
-    rm -rf "$HOME/.vim"
-    rm -f ~/.vimrc
+    remove_or_abort "$HOME/.vim"
     ln -s "$real_dirname" "$HOME/.vim"
-    ln -s ~/.vim/vimrc ~/.vimrc
   fi
  
+  # Erase existing, and warn the user about it first
+  echo "Init $HOME/.vimrc..."
+  remove_or_abort "$HOME/.vimrc"
+  ln -s $HOME/.vim/vimrc $HOME/.vimrc
+
+  echo "Download and/or update Vim modules..."
   git submodule init
   git submodule update
+
+  echo "Done! Enjoy viming :-)"
 }
 
 # Register a new Vim plugin into Vim configuration
@@ -62,7 +85,7 @@ add() {
 
   if [ -d bundle/$plugin_name ]; then
     echo "The $plugin_name plugin already exists under bundle/. Doing nothing..."
-    exit 2
+    return 2
   else
     git submodule add $1 bundle/$plugin_name
     git add bundle/$plugin_name
@@ -78,7 +101,7 @@ remove() {
     git commit -m "Remove $1 bundle from submodules list."
   else
     echo "The $1 plugin does not exist under bundle/. Doing nothing..."
-    exit 2
+    return 2
   fi
 }
 
