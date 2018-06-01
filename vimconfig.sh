@@ -66,7 +66,7 @@ init() {
     ln -s "$real_dirname" "$HOME/.vim"
   fi
  
-  # Erase existing, and warn the user about it first
+  # Erase existing .vimrc, and warn the user about it first
   echo "Init $HOME/.vimrc..."
   if ! [ -e "$HOME/.vimrc" ] || ! [ -L "$HOME/.vimrc" ] || \
 	! [ "$real_dirname/vimrc" = "$(readlink -f $HOME/.vimrc)" ]; then
