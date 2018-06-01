@@ -52,22 +52,27 @@ remove_or_abort() {
 # Initializes Vim configuration
 init() {
   # Build this script's effective parent directory
+  # by resolving links and/or trailing ~
   # (using pwd since we are necessarily in dotvimconfig dir,
   # and because, due to run_in_project, '$(dirname $0)' would be wrong)
-  real_dirname="`pwd`"
+  real_dirname="`readlink -f $(pwd)`"
+  real_dirname="${real_dirname/#\~/$HOME}"
 
   # If this script isn't launched from ~/.vim dir, then force rebuilding 
   # ~/.vim from the actual dotvimconfig project directory
   echo "Init $HOME/.vim..."
-  if ! [ "$real_dirname" = "$HOME/.vim" ] ; then
+  if ! [ "$real_dirname" = "$(readlink -f $HOME/.vim)" ] ; then
     remove_or_abort "$HOME/.vim"
     ln -s "$real_dirname" "$HOME/.vim"
   fi
  
   # Erase existing, and warn the user about it first
   echo "Init $HOME/.vimrc..."
-  remove_or_abort "$HOME/.vimrc"
-  ln -s $HOME/.vim/vimrc $HOME/.vimrc
+  if ! [ -e "$HOME/.vimrc" ] || ! [ -L "$HOME/.vimrc" ] || \
+	! [ "$real_dirname/vimrc" = "$(readlink -f $HOME/.vimrc)" ]; then
+    remove_or_abort "$HOME/.vimrc"
+    ln -s $HOME/.vim/vimrc $HOME/.vimrc
+  fi
 
   echo "Download and/or update Vim modules..."
   git submodule init
