@@ -40,6 +40,6 @@
 [submodule "bundle/vim-colorschemes"]
 	path = bundle/vim-colorschemes
 	url = https://github.com/flazz/vim-colorschemes
-[submodule "bundle/setcolors.vim"]
-	path = bundle/setcolors.vim
-	url = https://github.com/felixhummel/setcolors.vim
+[submodule "bundle/vim-fugitive"]
+	path = bundle/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive.git
