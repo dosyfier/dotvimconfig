@@ -1,5 +1,9 @@
 #!/bin/bash
 
+#-------------------#
+# Utility functions #
+#-------------------#
+
 usage() {
   cat <<EOF
 
@@ -32,9 +36,11 @@ parse_params() {
 	usage
 	exit 0
 	;;
+
       -*)
 	exit_with_message "Unknown option: '$1'"
 	;;
+
       *)
 	if [ -z "$DOTVIM_COMMAND" ]; then
 	  DOTVIM_COMMAND="$1"
@@ -77,16 +83,23 @@ run_in_project() {
   "$@"
 }
 
+confirm() {
+  REPLY=""
+  question="${2:-$1}"
+  prefix="${2+$1}"
+  [ -n "$prefix" ] && printf "$prefix\n"
+  while ! [[ $REPLY =~ ^[yn]$ ]]; do
+    read -r -p "$question [y/n] "
+  done
+  [ "$REPLY" = y ] && return 0 || return 2
+} 
+
 # Ask the user for the deletion of the file or directory provided as argument:
 # - If accepted, remove it and go on,
 # - Otherwise, exit in error.
 remove_or_abort() {
   if [ -e "$1" ]; then
-    echo "Existing $1 detected..."
-    while ! [[ $REPLY =~ ^[yn]$ ]]; do
-      read -r -p "Override? [y/n] "
-    done
-    if [ "$REPLY" = y ]; then
+    if confirm "Existing $1 detected..." "Override?"; then
       rm -rf "$1"
     else
       return 2
@@ -100,6 +113,11 @@ to_bundle_name() {
   mapfile -t url_parts < <(echo "$1" | grep -Po '[^\/]+')
   echo "${url_parts[-1]/%.git/}"
 }
+
+
+#----------------------------------------------#
+# Functions implementing dotvimconfig commands #
+#----------------------------------------------#
 
 # Initializes Vim configuration
 dotvim_init() {
@@ -176,10 +194,22 @@ dotvim_remove() {
 dotvim_update() {
   git submodule update
   git submodule foreach git pull origin master
+  modified_modules="$(git status -s bundle/ | awk '{ sub(/.*\//, ""); print "- "$1 }')"
+  printf '\n'
+  if [ -z "$modified_modules" ]; then
+    echo "No update found for any Vim plugin"
+  elif confirm "Following Vim plugins have uncommitted changes:\n$modified_modules" "Commit these changes?"; then
+    git add bundle/ && git commit -m "Updating Vim plugins"
+  elif confirm "Rollback these changes?"; then
+    git checkout -- bundle/
+  fi
 }
 
 
-# -- Main program -- #
+
+#--------------#
+# Main program #
+#--------------#
 
 parse_params "$@"
 run_in_project "dotvim_$DOTVIM_COMMAND" "$DOTVIM_PLUGIN"
