@@ -126,11 +126,20 @@ dotvim_init() {
     ln -s "$HOME/.vim/vimrc" "$HOME/.vimrc"
   fi
 
+  # Add a symlink to this vimconfig.sh script onto $HOME/.local/bin
+  echo "Install vimconfig command..."
+  mkdir -p "$HOME/.local/bin"
+  if ! [ -e "$HOME/.local/bin/vimconfig" ]; then
+    ln -s "$HOME/.vim/vimconfig.sh" "$HOME/.local/bin/vimconfig"
+  fi
+
   echo "Download and/or update Vim modules..."
   git submodule init
   git submodule update
 
   echo "Done! Enjoy viming :-)"
+  echo "New Vim plugin can be configured through the vimconfig command"
+  echo "(added to your \$PATH, under $HOME/.local/bin)"
 }
 
 # Register a new Vim plugin into Vim configuration
