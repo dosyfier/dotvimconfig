@@ -3,25 +3,70 @@
 usage() {
   cat <<EOF
 
-Usage: vimconfig [OPTIONS] <init|add|update> [plugin-url]
-
-Detailed commands:
-------------------
-vimconfig init                 -> Initializes Vim configuration
-vimconfig add [plugin-url]     -> Register a new Vim plugin into your configuration
-vimconfig remove [plugin-name] -> Delete some Vim plugin from your configuration
-vimconfig update               -> Update all registered Vim plugins at once
-
-Options:
---------
--h | --help  -> Display this message
-
-Examples:
----------
-vimconfig add https://github.com/tpope/vim-surround
-vimconfig remove vim-surround
+  Usage: vimconfig [OPTIONS] <command> [plugin-url/name]
+  
+  Detailed commands:
+  ------------------
+  vimconfig init                 -> Initializes Vim configuration
+  vimconfig add [plugin-url]     -> Register a new Vim plugin into your configuration
+  vimconfig remove [plugin-name] -> Delete some Vim plugin from your configuration
+  vimconfig update               -> Update all registered Vim plugins at once
+  
+  Options:
+  --------
+  -h | -? | --help		 -> Display this message
+  
+  Examples:
+  ---------
+  vimconfig add https://github.com/tpope/vim-surround
+  vimconfig remove vim-surround
 
 EOF
+}
+
+# Parses all this script's arguments and sets DOTVIM_* global variables
+parse_params() {
+  while [ $# -ne 0 ]; do
+    case "$1" in
+      "-h"|"-?"|"--help")
+	usage
+	exit 0
+	;;
+      -*)
+	exit_with_message "Unknown option: '$1'"
+	;;
+      *)
+	if [ -z "$DOTVIM_COMMAND" ]; then
+	  DOTVIM_COMMAND="$1"
+	  if [[ "$1" =~ ^(init|update)$ ]]; then
+	    if [ -n "$2" ]; then
+	      exit_with_message "Unexpected parameter for command '$DOTVIM_COMMAND'"
+	    fi
+
+	  elif [[ "$1" =~ ^(add|remove)$ ]]; then
+	    if [ -z "$2" ]; then
+	      exit_with_message "Missing plugin-url/name parameter for command '$DOTVIM_COMMAND'"
+	    else
+	      DOTVIM_PLUGIN="$2"
+	    fi
+
+	  else
+	    exit_with_message "Unknown command '$DOTVIM_COMMAND'"
+	  fi
+
+	else
+	  exit_with_message "Wrong syntax on '$1'"
+	fi
+	;;
+    esac
+    shift
+  done
+}
+
+# Exit this script and display usage content along with some explanation message
+exit_with_message() {
+  echo "$1"
+  usage; exit 1
 }
 
 # Run the provided command & arguments into dotvimconfig project's directory
@@ -39,7 +84,7 @@ remove_or_abort() {
   if [ -e "$1" ]; then
     echo "Existing $1 detected..."
     while ! [[ $REPLY =~ ^[yn]$ ]]; do
-      read -p "Override? [y/n] " -r
+      read -r -p "Override? [y/n] "
     done
     if [ "$REPLY" = y ]; then
       rm -rf "$1"
@@ -57,7 +102,7 @@ to_bundle_name() {
 }
 
 # Initializes Vim configuration
-init() {
+dotvim_init() {
   # Build this script's effective parent directory
   # by resolving links and/or trailing ~
   # (using pwd since we are necessarily in dotvimconfig dir,
@@ -90,7 +135,7 @@ init() {
 
 # Register a new Vim plugin into Vim configuration
 # $1 : New plugin's URL
-add() {
+dotvim_add() {
   plugin_name="$(to_bundle_name "$1")"
 
   if [ -d "bundle/$plugin_name" ]; then
@@ -105,7 +150,7 @@ add() {
 
 # Delete some Vim plugin from Vim configuration
 # $1 : The name or URL of the plugin to remove
-remove() {
+dotvim_remove() {
   plugin_name="$(to_bundle_name "$1")"
 
   if [ -d "bundle/$plugin_name" ]; then
@@ -119,7 +164,7 @@ remove() {
 }
 
 # Update all registered Vim plugins at once
-update() {
+dotvim_update() {
   git submodule update
   git submodule foreach git pull origin master
 }
@@ -127,15 +172,6 @@ update() {
 
 # -- Main program -- #
 
-command=$1
-if [[ $command =~ (-h|--help) ]]; then
-  usage
-  exit 0
-elif [ -z "$command" ] || ! [[ $command =~ (init|add|remove|update) ]] \
-  || [ $# -gt 2 ] || { ! [[ $command =~ (add|remove) ]] && [ $# -gt 1 ] ;}; then
-  usage
-  exit 1
-else
-  run_in_project "$@"
-fi
+parse_params "$@"
+run_in_project "dotvim_$DOTVIM_COMMAND" "$DOTVIM_PLUGIN"
 
