@@ -172,4 +172,8 @@ vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 highlight! link DiffText Todo
 
 " My favorite color scheme
+" Activating 256-color option to enjoy pretty graphics
+" (see: https://vim.fandom.com/wiki/256_colors_in_vim)
+set t_Co=256
 colorscheme bubblegum-256-dark
+
