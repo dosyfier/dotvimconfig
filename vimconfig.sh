@@ -1,5 +1,15 @@
 #!/bin/bash
 
+#-----------#
+# Constants #
+#-----------#
+
+# Build this script's effective parent directory
+# by resolving links and/or trailing ~
+DOTVIM_CFG_DIR="$(readlink -f "$(dirname "$0")")"
+DOTVIM_CFG_DIR="${DOTVIM_CFG_DIR/#\~/$HOME}"
+
+
 #-------------------#
 # Utility functions #
 #-------------------#
@@ -78,7 +88,7 @@ exit_with_message() {
 # Run the provided command & arguments into dotvimconfig project's directory
 run_in_project() {
   set -e
-  pushd "$HOME/.vim" > /dev/null
+  pushd "$DOTVIM_CFG_DIR" > /dev/null
   trap "popd > /dev/null" EXIT
   "$@"
 }
@@ -121,25 +131,18 @@ to_bundle_name() {
 
 # Initializes Vim configuration
 dotvim_init() {
-  # Build this script's effective parent directory
-  # by resolving links and/or trailing ~
-  # (using pwd since we are necessarily in dotvimconfig dir,
-  # and because, due to run_in_project, '$(dirname $0)' would be wrong)
-  real_dirname="$(readlink -f "$(pwd)")"
-  real_dirname="${real_dirname/#\~/$HOME}"
-
   # If this script isn't launched from ~/.vim dir, then force rebuilding 
   # ~/.vim from the actual dotvimconfig project directory
   echo "Init $HOME/.vim..."
-  if ! [ "$real_dirname" = "$(readlink -f "$HOME/.vim")" ] ; then
+  if ! [ "$DOTVIM_CFG_DIR" = "$(readlink -f "$HOME/.vim")" ] ; then
     remove_or_abort "$HOME/.vim"
-    ln -s "$real_dirname" "$HOME/.vim"
+    ln -s "$DOTVIM_CFG_DIR" "$HOME/.vim"
   fi
  
   # Erase existing .vimrc, and warn the user about it first
   echo "Init $HOME/.vimrc..."
   if ! [ -e "$HOME/.vimrc" ] || ! [ -L "$HOME/.vimrc" ] || \
-	! [ "$real_dirname/vimrc" = "$(readlink -f "$HOME/.vimrc")" ]; then
+	! [ "$DOTVIM_CFG_DIR/vimrc" = "$(readlink -f "$HOME/.vimrc")" ]; then
     remove_or_abort "$HOME/.vimrc"
     ln -s "$HOME/.vim/vimrc" "$HOME/.vimrc"
   fi
