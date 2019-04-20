@@ -159,7 +159,7 @@ dotvim_init() {
   git submodule update
 
   echo "Done! Enjoy viming :-)"
-  echo "New Vim plugin can be configured through the vimconfig command"
+  echo "New Vim plugins can be configured through the vimconfig command"
   echo "(added to your \$PATH, under $HOME/.local/bin)"
 }
 
