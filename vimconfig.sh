@@ -6,8 +6,11 @@
 
 # Build this script's effective parent directory
 # by resolving links and/or trailing ~
-DOTVIM_CFG_DIR="$(readlink -f "$(dirname "$0")")"
-DOTVIM_CFG_DIR="${DOTVIM_CFG_DIR/#\~/$HOME}"
+DOTVIM_CFG_SCRIPT_PATH="$0"
+while [ -L "$DOTVIM_CFG_SCRIPT_PATH" ]; do
+  DOTVIM_CFG_SCRIPT_PATH="$(readlink -f "$DOTVIM_CFG_SCRIPT_PATH")"
+done
+DOTVIM_CFG_DIR="$(realpath "$(dirname "${DOTVIM_CFG_SCRIPT_PATH/#\~/$HOME}")")"
 
 
 #-------------------#
@@ -64,6 +67,7 @@ parse_params() {
 	      exit_with_message "Missing plugin-url/name parameter for command '$DOTVIM_COMMAND'"
 	    else
 	      DOTVIM_PLUGIN="$2"
+	      shift
 	    fi
 
 	  else
