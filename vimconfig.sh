@@ -81,6 +81,10 @@ parse_params() {
     esac
     shift
   done
+
+  if [ -z "$DOTVIM_COMMAND" ]; then
+    exit_with_message "No command argument specified."
+  fi
 }
 
 # Exit this script and display usage content along with some explanation message
