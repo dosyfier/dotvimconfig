@@ -214,7 +214,7 @@ dotvim_update() {
   elif confirm "Following Vim plugins have uncommitted changes:\n$modified_modules" "Commit these changes?"; then
     git add bundle/ && git commit -m "Updating Vim plugins"
   elif confirm "Rollback these changes?"; then
-    git checkout -- bundle/
+    for module in "${modified_modules//- /}"; do git submodule update --checkout bundle/$module; done
   fi
 }
 
