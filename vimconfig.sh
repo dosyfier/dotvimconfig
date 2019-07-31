@@ -162,7 +162,7 @@ dotvim_init() {
     ln -s "$HOME/.vim/vimconfig.sh" "$HOME/.local/bin/vimconfig"
   fi
 
-  echo "Download and/or update Vim modules..."
+  echo "Download and/or update Vim plugins..."
   git submodule init
   git submodule update
 
@@ -182,7 +182,7 @@ dotvim_add() {
   else
     git submodule add "$1" "bundle/$plugin_name"
     git add "bundle/$plugin_name"
-    git commit -m "Install $plugin_name bundle as a submodule."
+    git commit -m "Install $plugin_name plugin as a submodule."
   fi
 }
 
