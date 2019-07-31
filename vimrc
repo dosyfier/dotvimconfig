@@ -175,7 +175,7 @@ nnoremap <C-L> :nohl<CR><C-L>
 " My custom config {{{1
 " 
 " Activate Pathogen
-execute pathogen#infect()
+execute pathogen#infect('bundle/{}', 'internal/{}')
 
 " Press Ctrl-r after selecting some text in visual mode to template a
 " '%s' Vim command to substitute it.
