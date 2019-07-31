@@ -28,6 +28,7 @@ usage() {
   vimconfig add [plugin-url]     -> Register a new Vim plugin into your configuration
   vimconfig remove [plugin-name] -> Delete some Vim plugin from your configuration
   vimconfig update               -> Update all registered Vim plugins at once
+  vimconfig reset                -> Reset all registered Vim plugins with new commits, one by one
   
   Options:
   --------
@@ -57,7 +58,7 @@ parse_params() {
       *)
 	if [ -z "$DOTVIM_COMMAND" ]; then
 	  DOTVIM_COMMAND="$1"
-	  if [[ "$1" =~ ^(init|update)$ ]]; then
+	  if [[ "$1" =~ ^(init|update|reset)$ ]]; then
 	    if [ -n "$2" ]; then
 	      exit_with_message "Unexpected parameter for command '$DOTVIM_COMMAND'"
 	    fi
@@ -218,6 +219,21 @@ dotvim_update() {
   fi
 }
 
+# Reset all registered Vim plugins with new commits, one by one
+dotvim_reset() {
+  modified_modules="$(git status -s bundle/ | awk '{ sub(/.*\//, ""); print $1 }')"
+  if [ -z "$modified_modules" ]; then
+    echo "No plugin to reset."
+  else
+    for module in ${modified_modules//- /}; do
+      if confirm "Rollback changes on plugin $module?"; then
+	git submodule update --checkout bundle/$module
+	echo "Commit message: [$(git --git-dir=.git/modules/bundle/$module log -1 --pretty=oneline | cut -d' ' -f2-)]."
+      fi
+    done
+    echo "Done. No more plugin to reset."
+  fi
+}
 
 
 #--------------#
