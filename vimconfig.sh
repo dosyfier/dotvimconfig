@@ -192,7 +192,7 @@ dotvim_remove() {
   plugin_name="$(to_bundle_name "$1")"
 
   if [ -d "bundle/$plugin_name" ]; then
-    git submodule deinit "bundle/$plugin_name"
+    git submodule deinit -f "bundle/$plugin_name"
     git rm "bundle/$plugin_name"
     git commit -m "Remove $plugin_name bundle from submodules list."
   else
