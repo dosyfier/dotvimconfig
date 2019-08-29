@@ -227,7 +227,8 @@ dotvim_reset() {
   else
     for module in ${modified_modules//- /}; do
       if confirm "Rollback changes on plugin $module?"; then
-	git submodule update --checkout bundle/$module
+	# ( cd bundle/$module; git checkout -- . )
+	git submodule update --force --checkout bundle/$module
 	echo "Commit message: [$(git --git-dir=.git/modules/bundle/$module log -1 --pretty=oneline | cut -d' ' -f2-)]."
       fi
     done
