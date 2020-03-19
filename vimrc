@@ -148,7 +148,7 @@ set pastetoggle=<F11>
 "
 " Indentation settings according to personal preference.
 
-" Indentation settings for using 4 spaces instead of tabs.
+" Indentation settings for using 2 spaces instead of tabs.
 set softtabstop=2
 set expandtab
 
