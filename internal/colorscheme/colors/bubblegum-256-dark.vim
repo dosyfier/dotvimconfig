@@ -91,7 +91,7 @@ hi ModeMsg ctermfg=222 cterm=bold guifg=#FFD787 guibg=#262626 gui=bold
 hi Question ctermfg=38 cterm=none guifg=#00AFD7 guibg=#262626 gui=none
 
 " Mark
-hi Folded ctermfg=244 cterm=none guifg=#808080 guibg=#262626 gui=none
+hi Folded ctermfg=50 ctermbg=237 cterm=none guifg=#808080 guibg=#262626 gui=none
 hi FoldColumn ctermfg=79 ctermbg=235 cterm=none guifg=#5FD7AF guibg=#3A3A3A gui=none
 hi SignColumn ctermfg=184 ctermbg=235 cterm=none guifg=#D7D700 guibg=#3A3A3A gui=none
 hi ColorColumn ctermbg=235 cterm=none guibg=#3A3A3A gui=none
@@ -114,10 +114,10 @@ hi DiffText ctermfg=16 ctermbg=211 cterm=bold guifg=#000000 guibg=#FF87AF gui=bo
 hi DiffDelete ctermfg=16 ctermbg=249 cterm=none guifg=#000000 guibg=#B2B2B2 gui=none
 
 " Spell
-hi SpellBad ctermfg=210 cterm=underline guifg=#FF8787 guibg=#262626 gui=underline
-hi SpellCap ctermfg=174 cterm=underline guifg=#D78787 guibg=#262626 gui=underline
-hi SpellRare ctermfg=181 cterm=underline guifg=#D7AFAF guibg=#262626 gui=underline
-hi SpellLocal ctermfg=180 cterm=underline guifg=#D7AF87 guibg=#262626 gui=underline
+hi SpellBad ctermfg=210 ctermbg=none cterm=underline guifg=#FF8787 guibg=#262626 gui=underline
+hi SpellCap ctermfg=174 ctermbg=none cterm=underline guifg=#D78787 guibg=#262626 gui=underline
+hi SpellRare ctermfg=181 ctermbg=none cterm=underline guifg=#D7AFAF guibg=#262626 gui=underline
+hi SpellLocal ctermfg=180 ctermbg=none cterm=underline guifg=#D7AF87 guibg=#262626 gui=underline
 
 " Misc
 hi SpecialKey ctermfg=114 cterm=none guifg=#87D787 guibg=#262626 gui=none
