@@ -22,7 +22,7 @@ confirm() {
   REPLY=""
   question="${2:-$1}"
   prefix="${2+$1}"
-  [ -n "$prefix" ] && printf "%s\n" "$prefix"
+  [ -n "$prefix" ] && echo -e "$prefix"
   while ! [[ $REPLY =~ ^[yn]$ ]]; do
     read -r -p "$question [y/n] "
   done
