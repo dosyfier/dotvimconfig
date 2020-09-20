@@ -173,7 +173,11 @@ nnoremap <C-L> :nohl<CR><C-L>
 
 "------------------------------------------------------------ 
 " My custom config {{{1
-" 
+
+" Ale settings (must be done prior to loading any other plugin)
+let g:ale_completion_enabled = 1
+let g:ale_completion_delay = v:null
+
 " Activate Pathogen
 execute pathogen#infect('bundle/{}', 'internal/{}')
 
