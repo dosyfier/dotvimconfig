@@ -179,7 +179,7 @@ execute pathogen#infect('bundle/{}', 'internal/{}')
 
 " Press Ctrl-r after selecting some text in visual mode to template a
 " '%s' Vim command to substitute it.
-vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
+vnoremap <C-r> "hy:%s/<C-r>h/<C-r>h/gc<left><left><left>
 
 " Thanks @alan-thompson
 " Fix the difficult-to-read default setting for diff text highlighting. The
